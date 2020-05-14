@@ -1,0 +1,50 @@
+{
+    "name": "sphp",
+    "description": "A simple PHP Framework.",
+    "keywords": ["php framework"],
+    "license": "MIT",
+    "support": {
+    },
+    "authors": [
+        {
+            "name": "Tom He",
+            "email": "tom_hejiaxi@163.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2.8",
+        "hprose/hprose": "2.0.38",
+        "fightbulc/moment": "^1.30"
+    },
+    "replace": {
+    },
+    "conflict": {
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "files": [
+        ],
+        "psr-4": {
+            "Core\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "files": [
+        ],
+        "psr-4": {
+            "Core\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+        }
+    },
+    "suggest": {
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
