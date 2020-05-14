@@ -6,8 +6,8 @@
     * [控制器](#控制器)
     * [视图](#视图)
     * [模型](#模型)
-    * [数据库操作](入门/数据库操作)
-    * [rpc](入门/rpc)
+    * [数据库](#数据库)
+    * [rpc](#rpc)
     * [日志](#日志)
     * [命令行工具](#命令行工具)
     * [计划任务](#计划任务)
@@ -184,11 +184,6 @@ GET/POST|  $this->getRequset()->get
 
 ## 视图
 
-
-
-
-
-
 ## 模型
 
 在控制器中调用模型
@@ -218,7 +213,367 @@ Class Account extends Model
 
 ```
 
+## 数据库
 
+
+### 配置
+
+`app/config/db.php`
+
+执行sql前需要获取数据库连接，通过以下方式获取
+
+```php
+$connection = $this->getApp()->getDataBaseConnection('配置key名');
+```
+
+
+
+* 执行自定义sql，并返回结果
+
+```php
+
+// show create table a
+$connection->fetchOne('show create table a');
+```
+
+
+```php
+
+// show create table a
+$connection->fetchAll('show create table a');
+```
+
+
+```php
+
+// select c1, c2 from a where id=1
+
+$connection->fetchAll('select c1, c2 from a where id=?', [1]);
+```
+
+
+
+* 执行自定义sql，仅返回影响行数
+
+```php
+
+// show create table a
+$connection->execute('show create table a');
+```
+
+
+
+
+
+### 查询
+
+
+```php
+
+// select id,ctime from mytable where id in (1,2,3)
+
+$connection->select('mytable', ['id', 'ctime'], ['id'=> [1,2,3]]);
+```
+
+```php
+
+// select id,ctime from mytable where id > 33
+
+$connection->select('mytable', ['id', 'ctime'], 'id>?', [33]);
+
+```
+
+```php
+
+// select id,ctime from mytable where id > 33 limit 100
+
+$connection->select('mytable', ['id', 'ctime'], 'id>?', [33], 100);
+
+```
+
+
+
+```php
+
+// select id,ctime from mytable where id > 33 order by id desc limit 100
+
+$connection->select('mytable', 
+              ['id', 'ctime'], 'id>?', [33], ['id'=>'desc'], 100);
+
+```
+
+
+```php
+
+// select id,ctime from mytable where id > 33 order by id desc limit 1,100
+
+$connection->select('mytable', 
+             ['id', 'ctime'], 'id>?', [33], ['id'=>'desc'], [1, 100]);
+
+```
+
+
+
+
+
+
+### 新增
+
+```php
+
+// insert into mytable (id, ctime) values (1, 1111)
+
+$connection->insert('mytable', ['id'=>1, 'ctime'=>1111]);
+```
+
+```php
+
+// insert IGNORE into mytable (id, ctime) values (1, 1111)
+
+$connection->insert('mytable', ['id'=>1, 'ctime'=>1111], true);
+```
+
+```php
+
+// insert into mytable (id, ctime) values (1, 1111), (2, 2222), (3, 3333)
+
+$connection->insertBatch('mytable', [ ['id'=>1, 'ctime'=>1111], ['id'=>2, 'ctime'=>2222], ['id'=>3, 'ctime'=>3333]]);
+```
+
+```php
+
+// insert IGNORE into mytable (id, ctime) values (1, 1111), (2, 2222), (3, 3333)
+
+$connection->insertBatch('mytable', 
+      [ ['id'=>1, 'ctime'=>1111], ['id'=>2, 'ctime'=>2222], ['id'=>3, 'ctime'=>3333]], true);
+
+```
+
+
+
+
+```php
+
+// 新增后返回新增记录id
+
+$connection->insertRetLastId('mytable', ['id'=>1, 'ctime'=>1111]);
+
+```
+
+```php
+
+// insert into mytable (id, ctime) values (1, 1111), (2, 2222)  
+// on duplicate key update ctime = values(ctime)
+
+$connection->insertBatchDuplicateKeyUpdate(
+                'mytable',
+                [['id'=>1, 'ctime'=>1111], ['id'=>2, 'ctime'=>2222]], 
+                ['ctime'=>'values(ctime)']
+             );
+
+```
+
+
+
+
+
+
+
+
+### 更新
+
+
+```php
+
+// update mytable set ctime=1234 where id = 1
+
+$connection->update('mytable', ['ctime'=>1234], ['id'=>1]);
+
+```
+
+```php
+
+// update mytable set ctime=1234 where id in (1,2,3)
+
+$connection->update('mytable', ['ctime'=>1234], ['id'=>[1,2,3] ]);
+
+```
+
+```php
+
+// update mytable set ctime=1234 where id > 1
+$connection->update('mytable', ['ctime'=>1234], 'id>?', [1]);
+
+
+
+```
+
+
+
+### 删除
+
+```php
+
+// delete from mytable where id > 1
+$connection->delete('mytable', 'id>?', 1);
+
+
+
+```
+
+```php
+
+// delete from mytable where id in (1,2,3)
+$connection->delete('mytable', ['id'=>[1,2,3]]);
+
+
+
+```
+
+```php
+
+// delete from mytable where id between 100 and 200
+
+$connection->delete('mytable', 'id between ? and ?', [100, 200]);
+
+
+
+```
+
+
+
+
+
+
+
+
+## rpc
+
+### 客户端
+
+* 调用服务配置
+
+ ./config/dev/rpc.php
+
+配置项 | 备注
+------|---
+host | rpc服务主机域名或ip
+
+```php
+
+<?php
+
+return [
+    'hotel' => [
+        'host' => 'hotel.hiii-life.rpc',
+    ],
+    'order' => [
+        'host' => 'order.hiii-life.rpc',
+    ],
+    'product' => [
+        'host' => 'product.hiii-life.rpc',
+    ],
+    'supplier' => [
+        'host' => 'supplier.hiii-life.rpc',
+    ],
+];
+
+```
+
+* 调用服务
+
+调用服务`http://hotel.hiii-life.rpc/Hotel/Info/detail`
+
+```php
+
+$client = \Core\Rpc\Client::getInstance();
+$client->call('hotel', ['Hotel', 'Info', 'detail'], ['aa']);
+
+```
+
+* 客户端传递 header
+
+```php
+# 代码片段
+$client = \Core\Rpc\Client::getInstance();
+$client->setHeader('appid', 1001);
+$client->setHeader('appname', 'xgo-driver');
+
+return $client->call('config', ['Geo', 'CallingCode', 'list'], []);
+```
+
+### 服务端
+
+
+* nginx配置
+
+```
+
+
+server {
+    listen 80;
+    server_name hotel.hiii-life.rpc;
+    root /data1/src/web/api.hotel.hiii-life.com/public;
+    location / {
+        rewrite ^(.*)$ /rpc.php?$query_string  last;
+    }
+    
+    location = /rpc.php {
+        fastcgi_intercept_errors on;
+        fastcgi_pass            hotel.api.fpm;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include                 fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param           HTTPS off;
+    }
+
+    access_log  /data1/log/nginx/hotel.hiii-life.rpc-access.log;
+    error_log  /data1/log/nginx/hotel.hiii-life.rpc-error.log;
+}
+
+
+```
+
+
+
+* 接口代码编写
+
+./app/src/RpcControllers/Hotel/Info.php
+
+```php
+
+<?php
+namespace App\RpcControllers\Hotel;
+
+use App\Exceptions\LangException;
+
+class Info extends \Core\Foundation\RpcController
+{
+    public function detailAction($id)
+    {
+        return ['id'=>$id, 'where'=>__DIR__];
+    }
+
+    public function listAction($page=0, $size=100)
+    {
+        return ['list'=>[], 'page'=>$page, 'size'=>$size];
+    }
+
+    public function exceptionAction($type=1)
+    {
+        throw new LangException('house', 103005012);
+    }
+
+    public function sleepAction($sec=3)
+    {
+        \sleep($sec);
+        return $sec;
+    }
+
+}
+
+
+```
 
 
 ## 配置
