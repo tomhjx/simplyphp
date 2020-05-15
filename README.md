@@ -449,6 +449,8 @@ $connection->delete('mytable', 'id between ? and ?', [100, 200]);
 
 ## rpc
 
+* [hprose框架](https://github.com/hprose)
+
 ### 客户端
 
 * 调用服务配置
