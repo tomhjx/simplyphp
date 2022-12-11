@@ -220,6 +220,18 @@ Class Account extends Model
 
 `app/config/db.php`
 
+
+ 配置文件名        |参数名                        |  备注
+-----------------|-----------------------------|---
+ db              |host                         | 数据库域名或ip
+ db              |port                         | 数据库端口
+ db              |user                         | 访问数据库的用户名
+ db              |password                     | 访问数据库的用户密码
+ db              |database                     | 数据库名称
+ db              |options                      | 驱动参数，目前仅支持pdo驱动
+
+
+
 执行sql前需要获取数据库连接，通过以下方式获取
 
 ```php
@@ -585,18 +597,12 @@ class Info extends \Core\Foundation\RpcController
 
  配置文件名        |参数名                        |  备注
 -----------------|-----------------------------|---
- db              |host                         | 数据库域名或ip
- db              |port                         | 数据库端口
- db              |user                         | 访问数据库的用户名
- db              |password                     | 访问数据库的用户密码
- db              |database                     | 数据库名称
- db              |options                      | 驱动参数，目前仅支持pdo驱动
  crossOrigin     |jsonpCallbackUrlParamName    | jsonp callback参数名
  crossOrigin     |corsAllowHeaders             | cors 允许访问的请求header
 
 ```php
 
-$configs = $this->getApp()->getConfig('db');
+$configs = $this->getApp()->getConfig('crossOrigin');
 
 
 ```
