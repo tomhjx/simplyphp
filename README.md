@@ -1,4 +1,7 @@
 # 索引
+* 开始
+    * [安装composer](https://docs.phpcomposer.com/)
+    * [安装框架](#安装框架)
 
 * 入门
     * [目录结构](#目录结构)
@@ -19,6 +22,49 @@
     * [常驻进程](#常驻进程)
 
 * 功能
+
+
+# 安装框架
+
+```bash
+
+mkdir -p ./myp/app
+
+cd ./myp/app 
+
+vi composer.json
+
+```
+
+```json
+
+{
+    "require": {      
+      "tomhjx/simplyphp": "master@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "repositories": {
+      "tomhjx/simplyphp" : {
+        "type": "vcs",
+        "url":  "git@github.com:tomhjx/simplyphp.git"
+      }
+    },
+    "minimum-stability": "dev"
+  }
+  
+
+```
+
+```bash
+
+composer install
+
+```
+
 
 # 目录结构
 
