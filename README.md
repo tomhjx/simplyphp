@@ -52,8 +52,8 @@
 ```
 
 ./
+├── bootstrap                    （目录包含引导框架并配置自动加载的文件）
 ├── app                          （应用代码）
-│    ├── bootstrap               （目录包含引导框架并配置自动加载的文件）
 │    ├── vendor                  （包含 Composer 管理的类库）
 │    ├── src                     （应用程序类库）
 │    │    ├── Tasks              （计划任务类）
@@ -77,6 +77,18 @@
 ├── tests                   （测试用例）
 └── public                  （包含入口文件index.php、可直接访问的css、js等资源文件）
 
+
+```
+
+提供引导文件
+
+```php
+
+<?php
+
+include dirname(__DIR__). '/app/vendor/autoload.php';
+
+return \Core\Foundation\Application::getInstance(dirname(__DIR__));
 
 ```
 
