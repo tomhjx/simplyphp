@@ -26,11 +26,14 @@
 
 # 安装框架
 
+* 创建项目目录
+
 ```bash
 
-mkdir -p ./myp/app
-
-cd ./myp/app 
+mkdir -p /var/www/myp
+cd /var/www/myp
+mkdir -p app bootstrap config
+cd ./app 
 
 vi composer.json
 
@@ -62,6 +65,25 @@ vi composer.json
 ```bash
 
 composer install
+
+```
+
+
+* 创建项目引导文件
+
+```bash
+
+vi /var/www/myp/bootstrap/instance.php
+
+```
+
+```php
+
+<?php
+
+include dirname(__DIR__). '/app/vendor/autoload.php';
+
+return \Core\Foundation\Application::getInstance(dirname(__DIR__));
 
 ```
 
@@ -126,17 +148,6 @@ composer install
 
 ```
 
-提供引导文件
-
-```php
-
-<?php
-
-include dirname(__DIR__). '/app/vendor/autoload.php';
-
-return \Core\Foundation\Application::getInstance(dirname(__DIR__));
-
-```
 
 
 # 提供功能
